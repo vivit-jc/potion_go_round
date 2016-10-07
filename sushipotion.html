@@ -4,60 +4,7 @@
 <meta charset="utf-8">
 <script src="jquery-3.1.1.min.js"></script>
 <script src="jquery-ui.min.js"></script>
-<script>
-
-var potions = []
-
-$(function(){
-
-  $("td").click(function(){
-    material = $(this).attr("id")
-    $("#cauldron").append("<img class=\""+material+"\" src=\"img/"+material+".png\">")
-  })
-
-  $("#cauldron").click(function(){
-    materials = jQuery.map($(this).children(),function(material,i){
-      return $(material).attr("class")
-    })
-    material_size = materials.length
-    materialbox = [0,0,0,0]
-    jQuery.each(materials,function(i,mname){
-      switch(mname){
-        case 'mushroom'  : materialbox[0]+=1; break;
-        case 'lizard'    : materialbox[1]+=1; break;
-        case 'herbs'     : materialbox[2]+=1; break;
-        case 'earthworm' : materialbox[3]+=1; break;
-      }
-    })
-    if(material_size == 2 && materialbox[0] == 1 && materialbox[1] == 1){
-      go_round_potion('red')
-    } else if(material_size == 3 && materialbox[0] == 1 && materialbox[1] == 1 && materialbox[2] == 1){
-      go_round_potion('green')
-    } else if(material_size > 0) {
-      go_round_potion('')
-    }
-    $("#cauldron").children().remove();
-  })
-
-  setInterval(function(){
-    jQuery.each(potions,function(i){
-      move_potion(i)
-    })
-  },160)
-
-})
-
-function move_potion(no){
-  potions[no][1] += 2
-  $("img#"+no).offset({left: potions[no][1] });
-}
-
-function go_round_potion(color){
-  no = potions.length
-  $("#belt").append("<img class=\"potion\" id=\""+no+"\" src=\"img/"+color+"potion.png\">")
-  potions.push([color, 10])
-}
-</script>
+<script src="main.js"></script>
 <style>
 .container{
   display: flex;
@@ -69,37 +16,55 @@ function go_round_potion(color){
 #belt{
   height: 50px;
 }
-.potion{
-  position: absolute;
-}
 td{
   width:80px;
   height:80px;
   border:solid;
   text-align: center;
 }
+
 </style>
 </head>
 <body>
 <div class="container">
-<div class="witch">
-<img src="img/witch.png">
+  <div class="bubble">
+    <img src="img/bubble.png" id="b0">
+  </div>
+  <div class="bubble">
+    <img src="img/bubble.png" id="b1">
+  </div>
+  <div class="bubble">
+    <img src="img/bubble.png" id="b2">
+  </div>
+  <div class="bubble">
+    <img src="img/bubble.png" id="b3">
+  </div>
+  <div class="bubble">
+    <img src="img/bubble.png" id="b4">
+  </div>
+  <div class="bubble">
+    <img src="img/bubble.png" id="b5">
+  </div>
 </div>
-<div class="witch">
-<img src="img/witch.png">
-</div>
-<div class="witch">
-<img src="img/witch.png">
-</div>
-<div class="witch">
-<img src="img/witch.png">
-</div>
-<div class="witch">
-<img src="img/witch.png">
-</div>
-<div class="witch">
-<img src="img/witch.png">
-</div>
+<div class="container">
+  <div class="witch">
+    <img src="img/witch.png" id="w0">
+  </div>
+  <div class="witch">
+    <img src="img/witch.png" id="w1">
+  </div>
+  <div class="witch">
+    <img src="img/witch.png" id="w2">
+  </div>
+  <div class="witch">
+    <img src="img/witch.png" id="w3">
+  </div>
+  <div class="witch">
+    <img src="img/witch.png" id="w4">
+  </div>
+  <div class="witch">
+    <img src="img/witch.png" id="w5">
+  </div>
 </div>
 <div id="belt">
 </div>
