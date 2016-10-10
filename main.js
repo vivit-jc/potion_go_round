@@ -1,6 +1,7 @@
 var potions = []
 var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
+var potion_total = 0
 var score = 0
 
 $(function(){
@@ -26,10 +27,12 @@ $(function(){
         case 'earthworm' : materialbox[3]+=1; break;
       }
     })
-    if(material_size == 2 && materialbox[0] == 1 && materialbox[1] == 1){
+    if([1,1,0,0].toString() == materialbox.toString()){
       go_round_potion('red')
-    } else if(material_size == 3 && materialbox[0] == 1 && materialbox[1] == 1 && materialbox[2] == 1){
+    } else if([1,1,1,0].toString() == materialbox.toString()){
       go_round_potion('green')
+    } else if([1,1,1,1].toString() == materialbox.toString()){
+      go_round_potion('purple')
     } else if(material_size > 0) {
       go_round_potion('')
     }
@@ -40,7 +43,6 @@ $(function(){
     jQuery.each(potions,function(i){
       move_potion(i)
       check_order(i)
-      // メモ eachの途中なので、この中でpotionsに変更を加えてはいけない
     })
     potions = potions.filter(function(e){return e != null})
   },150)
@@ -103,10 +105,10 @@ function check_order(potion_no){
 }
 
 function go_round_potion(color){
-  var no = potions.length
-  $("#belt").append("<img class=\"potion\" id=\"p"+no+"\" src=\"img/"+color+"potion.png\">")
-  $("img#p"+no).offset({left: 8});
-  potions.push([color, 8, no])
+  $("#belt").append("<img class=\"potion\" id=\"p"+potion_total+"\" src=\"img/"+color+"potion.png\">")
+  $("img#p"+potion_total).offset({left: 8});
+  potions.push([color, 8, potion_total])
+  potion_total += 1
 }
 
 function dice(){
