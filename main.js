@@ -1,6 +1,7 @@
 var potions = []
 var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
+var score = 0
 
 $(function(){
 
@@ -41,6 +42,7 @@ $(function(){
       check_order(i)
       // メモ eachの途中なので、この中でpotionsに変更を加えてはいけない
     })
+    potions = potions.filter(function(e){return e != null})
   },150)
   setInterval(function(){
     if(dice() == 0){
@@ -81,7 +83,7 @@ function move_potion(potion_no){
   var left = potions[potion_no][1] + 2
   if(left >= 360) left = 8
   potions[potion_no][1] = left
-  $("img#p"+potion_no).offset({left: left})
+  $("img#p"+potions[potion_no][2]).offset({left: left})
 }
 
 function check_order(potion_no){
@@ -91,8 +93,11 @@ function check_order(potion_no){
     if(witches[i] == null || potion[1] != pos) return true
     if(color == witches[i][0]){
       remove_witch(i)
-      $("#p"+potion_no).remove()
-      potions = potions.filter(function(e){return e != potion})
+      $("#p"+potion[2]).remove()
+      potions[potion_no] = null
+      witches[i] = null
+      score += 1
+      console.log("score: "+score)
     }
   })
 }
@@ -101,7 +106,7 @@ function go_round_potion(color){
   var no = potions.length
   $("#belt").append("<img class=\"potion\" id=\"p"+no+"\" src=\"img/"+color+"potion.png\">")
   $("img#p"+no).offset({left: 8});
-  potions.push([color, 8])
+  potions.push([color, 8, no])
 }
 
 function dice(){
