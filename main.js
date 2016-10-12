@@ -3,6 +3,7 @@ var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
 var potion_total = 0
 var score = 0
+var hyouban = 20
 
 $(function(){
 
@@ -39,6 +40,7 @@ $(function(){
     $("#cauldron").children().remove();
   })
 
+  // ポーションの定期処理
   setInterval(function(){
     jQuery.each(potions,function(i){
       move_potion(i)
@@ -46,10 +48,16 @@ $(function(){
     })
     potions = potions.filter(function(e){return e != null})
   },150)
+
+  // 客の定期処理
   setInterval(function(){
     if(dice() == 0){
       set_order()
     }
+    jQuery.each(witches, function(i,witch){
+      if(witch != null) waiting_witch(i)
+    })
+    show_hyouban()
   },1000)
 
 })
@@ -61,10 +69,21 @@ function set_order(){
   while(true){
     var no = dice()
     if(!witches[no]){
-      witches[no] = [order,100]
+      witches[no] = [order,10]
       add_witch(no)
       break
     }
+  }
+}
+
+function waiting_witch(no){
+  witch = witches[no]
+  witch[1] -= 1
+  if(witch[1] == 0){
+    remove_witch(no)
+    witches[no] = null
+    hyouban -= 3
+    console.log("witch"+no+" gave up")
   }
 }
 
@@ -99,6 +118,7 @@ function check_order(potion_no){
       potions[potion_no] = null
       witches[i] = null
       score += 1
+      if(hyouban < 20) hyouban += 1
       console.log("score: "+score)
     }
   })
@@ -109,6 +129,14 @@ function go_round_potion(color){
   $("img#p"+potion_total).offset({left: 8});
   potions.push([color, 8, potion_total])
   potion_total += 1
+}
+
+function show_hyouban(){
+  var str = ""
+  for(var i=0;i<hyouban;i++){
+    str += "|"
+  }
+  $("#hyouban").html(str)
 }
 
 function dice(){
