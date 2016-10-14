@@ -4,10 +4,12 @@ var witches = [null,null,null,null,null,null]
 var potion_total = 0
 var score = 0
 var hyouban = 20
+var stock = [10,10,10,10]
 
 $(function(){
 
   for(var i=0;i<=5;i++){remove_witch(i)}
+  for(i=0;i<=4;i++){show_stock(i)}
 
   $("td").click(function(){
     var material = $(this).attr("id")
@@ -69,7 +71,7 @@ function set_order(){
   while(true){
     var no = dice()
     if(!witches[no]){
-      witches[no] = [order,10]
+      witches[no] = [order,60]
       add_witch(no)
       break
     }
@@ -82,7 +84,7 @@ function waiting_witch(no){
   if(witch[1] == 0){
     remove_witch(no)
     witches[no] = null
-    hyouban -= 3
+    if(hyouban > 0) hyouban -= 3
     console.log("witch"+no+" gave up")
   }
 }
@@ -136,7 +138,13 @@ function show_hyouban(){
   for(var i=0;i<hyouban;i++){
     str += "|"
   }
+  if(str == "") str = "|"
   $("#hyouban").html(str)
+}
+
+function show_stock(material_no){
+  var materials = ['mushroom','lizard','herbs','earthworm']
+  $("#"+materials[material_no]+"_s").html(stock[material_no])
 }
 
 function dice(){
