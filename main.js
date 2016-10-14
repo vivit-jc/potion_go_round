@@ -5,6 +5,7 @@ var potion_total = 0
 var score = 0
 var hyouban = 20
 var stock = [10,10,10,10]
+var material_name = ['mushroom','lizard','herbs','earthworm']
 
 $(function(){
 
@@ -13,7 +14,11 @@ $(function(){
 
   $("td").click(function(){
     var material = $(this).attr("id")
+    var no = get_material_no(material)
+    if(stock[no] == 0) return false
     $("#cauldron").append("<img class=\""+material+"\" src=\"img/"+material+".png\">")
+    stock[no] -= 1
+    show_stock(no)
   })
 
   $("#cauldron").click(function(){
@@ -85,7 +90,6 @@ function waiting_witch(no){
     remove_witch(no)
     witches[no] = null
     if(hyouban > 0) hyouban -= 3
-    console.log("witch"+no+" gave up")
   }
 }
 
@@ -121,7 +125,6 @@ function check_order(potion_no){
       witches[i] = null
       score += 1
       if(hyouban < 20) hyouban += 1
-      console.log("score: "+score)
     }
   })
 }
@@ -143,8 +146,11 @@ function show_hyouban(){
 }
 
 function show_stock(material_no){
-  var materials = ['mushroom','lizard','herbs','earthworm']
-  $("#"+materials[material_no]+"_s").html(stock[material_no])
+  $("#"+material_name[material_no]+"_s").html(stock[material_no])
+}
+
+function get_material_no(material){
+  return material_name.indexOf(material)
 }
 
 function dice(){

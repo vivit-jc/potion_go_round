@@ -9,6 +9,18 @@
 .container{
   display: flex;
 }
+.column{
+  display: flex;
+  flex-direction: column;
+}
+.column_box{
+  width: 80px;
+  height: 80px;
+  border: solid;
+  margin: 2px;
+  padding: 2px;
+  text-align: center;
+}
 #cauldron{
   width:180px;
   border:solid;
@@ -28,6 +40,7 @@ td{
 </style>
 </head>
 <body>
+<div class="column">
 <div class="container" id="bubbles">
   <div class="bubble">
     <img src="img/white.png" id="b0">
@@ -82,11 +95,18 @@ td{
   </tr>
 </table>
 <div id="cauldron">
-
+</div>
+<div class="column">
+<div id="phone" class="column_box">
+  <img src="img/phone.png">
+</div>
+<div id="book" class="column_box">
+  <img src="img/book.png">
+</div>
 </div>
 </div>
 <div id="hyouban">
-
+</div>
 </div>
 </body>
 </html>
