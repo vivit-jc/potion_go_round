@@ -21,6 +21,9 @@
   padding: 2px;
   text-align: center;
 }
+.stage{
+  margin: auto;
+}
 #cauldron{
   width:180px;
   border:solid;
@@ -37,9 +40,15 @@ td{
 .potion{
   position: absolute;
 }
+#title{
+}
+#game{
+  display: none;
+}
 </style>
 </head>
 <body>
+<div class="container" id="game">
 <div class="column">
 <div class="container" id="bubbles">
   <div class="bubble">
@@ -107,6 +116,16 @@ td{
 </div>
 <div id="hyouban">
 </div>
+</div>
+</div>
+<div id="title" class="column">
+  <div class="stage">
+  <h1>POTION GO ROUND</h1>
+  </div>
+  <div class="stage">stage select</div>
+  <div class="stage selecter">easy</div>
+  <div class="stage selecter">normal</div>
+  <div class="stage selecter">hard</div>
 </div>
 </body>
 </html>

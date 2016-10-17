@@ -12,6 +12,20 @@ $(function(){
   for(var i=0;i<=5;i++){remove_witch(i)}
   for(i=0;i<=4;i++){show_stock(i)}
 
+  $(".selecter").hover(function(){
+    $(this).css("background-color","black")
+    $(this).css("color","white")
+  },function(){
+    $(this).css("background-color","white")
+    $(this).css("color","black")
+  })
+
+  $(".selecter").click(function(){
+    $("#title").toggle()
+    $("#game").toggle()
+    start_game()
+  })
+
   $("td").click(function(){
     var material = $(this).attr("id")
     var no = get_material_no(material)
@@ -47,6 +61,9 @@ $(function(){
     $("#cauldron").children().remove();
   })
 
+})
+
+function start_game(){
   // ポーションの定期処理
   setInterval(function(){
     jQuery.each(potions,function(i){
@@ -66,8 +83,7 @@ $(function(){
     })
     show_hyouban()
   },1000)
-
-})
+}
 
 function set_order(){
   var order = ["red","green","purple"]
