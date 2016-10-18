@@ -6,6 +6,9 @@ var score = 0
 var hyouban = 20
 var stock = [10,10,10,10]
 var material_name = ['mushroom','lizard','herbs','earthworm']
+var order = ["red","green","purple"]
+var price = [100,150,200]
+var combo = 0
 
 $(function(){
 
@@ -65,6 +68,8 @@ $(function(){
 
 function start_game(){
   // ポーションの定期処理
+  show_data()
+
   setInterval(function(){
     jQuery.each(potions,function(i){
       move_potion(i)
@@ -75,24 +80,22 @@ function start_game(){
 
   // 客の定期処理
   setInterval(function(){
-    if(dice() == 0){
+    if(dice() > 0){
       set_order()
     }
     jQuery.each(witches, function(i,witch){
       if(witch != null) waiting_witch(i)
     })
-    show_hyouban()
   },1000)
 }
 
 function set_order(){
-  var order = ["red","green","purple"]
-  order = order[Math.floor(Math.random()*3)]
+  var potion = order[Math.floor(Math.random()*order.length)]
   if(witches.indexOf(null)<0){return false}
   while(true){
     var no = dice()
     if(!witches[no]){
-      witches[no] = [order,60]
+      witches[no] = [potion,60]
       add_witch(no)
       break
     }
@@ -106,6 +109,8 @@ function waiting_witch(no){
     remove_witch(no)
     witches[no] = null
     if(hyouban > 0) hyouban -= 3
+    combo = 0
+    show_data()
   }
 }
 
@@ -139,8 +144,10 @@ function check_order(potion_no){
       $("#p"+potion[2]).remove()
       potions[potion_no] = null
       witches[i] = null
-      score += 1
+      score += price[order.indexOf(color)]
       if(hyouban < 20) hyouban += 1
+      combo += 1
+      show_data()
     }
   })
 }
@@ -152,13 +159,15 @@ function go_round_potion(color){
   potion_total += 1
 }
 
-function show_hyouban(){
+function show_data(){
   var str = ""
   for(var i=0;i<hyouban;i++){
     str += "|"
   }
   if(str == "") str = "|"
   $("#hyouban").html(str)
+  $("#score").html("score: "+score)
+  if(combo > 2) $("#combo").html(combo+"combo!")
 }
 
 function show_stock(material_no){
