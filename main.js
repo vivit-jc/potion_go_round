@@ -40,6 +40,10 @@ $(function(){
     show_stock(no)
   })
 
+  $("#book").click(function(){
+    toggle_recipe()
+  })
+
   $("#cauldron").click(function(){
     var materials = jQuery.map($(this).children(),function(material,i){
       return $(material).attr("class")
@@ -187,6 +191,10 @@ function show_data(){
   $("#hyouban").html(str)
   $("#score").html("score: "+score)
   if(combo > 2) $("#combo").html(combo+"combo!")
+}
+
+function toggle_recipe(){
+  $("#recipe").toggle()
 }
 
 function show_stock(material_no){
