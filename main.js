@@ -9,6 +9,8 @@ var material_name = ['mushroom','lizard','herbs','earthworm']
 var order = ["red","green","purple"]
 var price = [100,150,200]
 var combo = 0
+var max_combo = 0
+var time = 240
 
 $(function(){
 
@@ -61,7 +63,7 @@ $(function(){
     } else if(material_size > 0) {
       go_round_potion('')
     }
-    $("#cauldron").children().remove();
+    $("#cauldron").children().remove()
   })
 
 })
@@ -86,7 +88,22 @@ function start_game(){
     jQuery.each(witches, function(i,witch){
       if(witch != null) waiting_witch(i)
     })
+    time -= 1
+    if(time == 0){
+      finish_game()
+    }
   },1000)
+}
+
+function finish_game(){
+  $("#game").toggle()
+  $("#cauldron").children().remove()
+  $("td").click()
+  $("#cauldron").click()
+  $("#cauldron").append("<p id=\"max_combo\"></p>")
+  $("#cauldron").append("<p id=\"finish_game\"></p>")
+  $("#max_combo").html("max combo "+max_combo)
+  $("#finish_score").html("score "+score)
 }
 
 function set_order(){
@@ -147,6 +164,8 @@ function check_order(potion_no){
       score += price[order.indexOf(color)]
       if(hyouban < 20) hyouban += 1
       combo += 1
+      score += combo * 2
+      if(combo > max_combo) max_combo = combo
       show_data()
     }
   })
