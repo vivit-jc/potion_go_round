@@ -10,14 +10,14 @@ var order = ["red","green","purple"]
 var price = [100,150,200]
 var combo = 0
 var max_combo = 0
-var time = 240
+var time = 120
 
 $(function(){
 
   for(var i=0;i<=5;i++){remove_witch(i)}
   for(i=0;i<=4;i++){show_stock(i)}
 
-  $(".selecter").hover(function(){
+  $(".stagename").hover(function(){
     $(this).css("background-color","black")
     $(this).css("color","white")
   },function(){
@@ -25,7 +25,7 @@ $(function(){
     $(this).css("color","black")
   })
 
-  $(".selecter").click(function(){
+  $(".stagename").click(function(){
     $("#title").toggle()
     $("#game").toggle()
     start_game()
@@ -72,7 +72,7 @@ function start_game(){
   // ポーションの定期処理
   show_data()
 
-  setInterval(function(){
+  var repeat_potion = setInterval(function(){
     jQuery.each(potions,function(i){
       move_potion(i)
       check_order(i)
@@ -81,32 +81,32 @@ function start_game(){
   },150)
 
   // 客の定期処理
-  setInterval(function(){
-    if(dice() > 0){
-      set_order()
-    }
+  var repeat_witch = setInterval(function(){
+    set_order()
     jQuery.each(witches, function(i,witch){
       if(witch != null) waiting_witch(i)
     })
     time -= 1
     if(time == 0){
+      clearInterval(repeat_potion)
+      clearInterval(repeat_witch)
       finish_game()
     }
   },1000)
 }
 
 function finish_game(){
-  $("#game").toggle()
   $("#cauldron").children().remove()
-  $("td").click()
-  $("#cauldron").click()
+  $("td").off()
+  $("div").off()
+  $("#cauldron").append("<p id=\"finish_score\"></p>")
   $("#cauldron").append("<p id=\"max_combo\"></p>")
-  $("#cauldron").append("<p id=\"finish_game\"></p>")
   $("#max_combo").html("max combo "+max_combo)
   $("#finish_score").html("score "+score)
 }
 
 function set_order(){
+  if(dice() >= 3) return false
   var potion = order[Math.floor(Math.random()*order.length)]
   if(witches.indexOf(null)<0){return false}
   while(true){
