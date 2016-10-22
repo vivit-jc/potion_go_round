@@ -14,7 +14,6 @@ var time = 120
 
 $(function(){
 
-  for(var i=0;i<=5;i++){remove_witch(i)}
   for(i=0;i<=4;i++){show_stock(i)}
 
   $(".stagename").hover(function(){
@@ -38,6 +37,14 @@ $(function(){
     $("#cauldron").append("<img class=\""+material+"\" src=\"img/"+material+".png\">")
     stock[no] -= 1
     show_stock(no)
+  })
+
+  $(".witch").click(function(){
+    var id = parseInt($(this).attr("id"),10)
+    if(witches[id] == "taken") {
+      witches[id] = null
+      $("#w"+id).attr("src","img/white.png")
+    }
   })
 
   $("#cauldron").click(function(){
@@ -107,8 +114,8 @@ function finish_game(){
 
 function set_order(){
   if(dice() >= 3) return false
+  if(witches.indexOf(null)<0) return false
   var potion = order[Math.floor(Math.random()*order.length)]
-  if(witches.indexOf(null)<0){return false}
   while(true){
     var no = dice()
     if(!witches[no]){
@@ -120,10 +127,11 @@ function set_order(){
 }
 
 function waiting_witch(no){
+  if(witches[no] == "taken") return true
   witch = witches[no]
   witch[1] -= 1
   if(witch[1] == 0){
-    remove_witch(no)
+    remove_witch(no,false)
     witches[no] = null
     if(hyouban > 0) hyouban -= 3
     combo = 0
@@ -131,8 +139,9 @@ function waiting_witch(no){
   }
 }
 
-function remove_witch(no){
-  $("#w"+no).attr("src","img/white.png")
+function remove_witch(no, bag){
+  if(bag) $("#w"+no).attr("src","img/bag.png")
+  else $("#w"+no).attr("src","img/white.png")
   $("#b"+no).attr("src","img/white.png")
   $("#o"+no).remove()
 }
@@ -157,10 +166,10 @@ function check_order(potion_no){
   jQuery.each(witch_pos, function(i,pos){
     if(witches[i] == null || potion[1] != pos) return true
     if(color == witches[i][0]){
-      remove_witch(i)
+      remove_witch(i,true)
       $("#p"+potion[2]).remove()
       potions[potion_no] = null
-      witches[i] = null
+      witches[i] = "taken"
       score += price[order.indexOf(color)]
       if(hyouban < 20) hyouban += 1
       combo += 1
