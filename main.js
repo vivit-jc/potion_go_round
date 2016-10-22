@@ -40,6 +40,10 @@ $(function(){
     show_stock(no)
   })
 
+  $(".witch").click(function(){
+    if()
+  })
+
   $("#cauldron").click(function(){
     var materials = jQuery.map($(this).children(),function(material,i){
       return $(material).attr("class")
@@ -132,7 +136,7 @@ function waiting_witch(no){
 }
 
 function remove_witch(no){
-  $("#w"+no).attr("src","img/white.png")
+  $("#w"+no).attr("src","img/bag.png")
   $("#b"+no).attr("src","img/white.png")
   $("#o"+no).remove()
 }
@@ -160,7 +164,7 @@ function check_order(potion_no){
       remove_witch(i)
       $("#p"+potion[2]).remove()
       potions[potion_no] = null
-      witches[i] = null
+      witches[i] = "taken"
       score += price[order.indexOf(color)]
       if(hyouban < 20) hyouban += 1
       combo += 1
