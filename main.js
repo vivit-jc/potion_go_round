@@ -1,3 +1,7 @@
+var material_name = ['mushroom','lizard','herbs','earthworm']
+var order = ["red","green","purple"]
+var price = [100,150,200]
+
 var potions = []
 var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
@@ -5,15 +9,28 @@ var potion_total = 0
 var score = 0
 var hyouban = 20
 var stock = [10,10,10,10]
-var material_name = ['mushroom','lizard','herbs','earthworm']
-var order = ["red","green","purple"]
-var price = [100,150,200]
 var combo = 0
 var max_combo = 0
 var time = 120
 
 $(function(){
+  initialize_element()
+  initialize_data()
+})
 
+function initialize_data(){
+  potions = []
+  witches = [null,null,null,null,null,null]
+  potion_total = 0
+  score = 0
+  hyouban = 20
+  stock = [10,10,10,10]
+  combo = 0
+  max_combo = 0
+  time = 120
+}
+
+function initialize_element(){
   for(i=0;i<=4;i++){show_stock(i)}
 
   $(".stagename").hover(function(){
@@ -51,8 +68,8 @@ $(function(){
     var materials = jQuery.map($(this).children(),function(material,i){
       return $(material).attr("class")
     })
-    var material_size = materials.length
     var materialbox = [0,0,0,0]
+    var material_size = materials.length
     jQuery.each(materials,function(i,mname){
       switch(mname){
         case 'mushroom'  : materialbox[0]+=1; break;
@@ -72,8 +89,7 @@ $(function(){
     }
     $("#cauldron").children().remove()
   })
-
-})
+}
 
 function start_game(){
   // ポーションの定期処理
@@ -99,7 +115,7 @@ function start_game(){
       clearInterval(repeat_witch)
       finish_game()
     }
-  },1000)
+  },10)
 }
 
 function finish_game(){
@@ -108,8 +124,23 @@ function finish_game(){
   $("div").off()
   $("#cauldron").append("<p id=\"finish_score\"></p>")
   $("#cauldron").append("<p id=\"max_combo\"></p>")
+  $("#cauldron").append("<p id=\"return_title\">return title</p>")
   $("#max_combo").html("max combo "+max_combo)
   $("#finish_score").html("score "+score)
+  $("#return_title").hover(function(){
+    $(this).css("background-color","black")
+    $(this).css("color","white")
+  },function(){
+    $(this).css("background-color","white")
+    $(this).css("color","black")
+  })
+  $("#return_title").click(function(){
+    $("#game").toggle()
+    $("#title").toggle()
+    $("#cauldron").children().remove()
+    initialize_data()
+    initialize_element()
+  })
 }
 
 function set_order(){
