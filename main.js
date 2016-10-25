@@ -141,6 +141,9 @@ function finish_game(){
     initialize_data()
     initialize_element()
   })
+  $("#belt").children().remove()
+  for(var i=0;i<6;i++) remove_witch(i)
+
 }
 
 function set_order(){
