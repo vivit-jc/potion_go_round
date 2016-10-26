@@ -1,3 +1,8 @@
+var material_name = ['mushroom','lizard','herbs','earthworm']
+var order = ["red","green","purple"]
+var price = [100,150,200]
+var gamemode_str = ["easy", "normal", "hard", "endless hasty", "endless 0miss"]
+
 var potions = []
 var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
@@ -5,16 +10,31 @@ var potion_total = 0
 var score = 0
 var hyouban = 20
 var stock = [10,10,10,10]
-var material_name = ['mushroom','lizard','herbs','earthworm']
-var order = ["red","green","purple"]
-var price = [100,150,200]
 var combo = 0
 var max_combo = 0
-var time = 120
+var time = 20
+var gamemode = ""
 
 $(function(){
+  initialize_element()
+  initialize_data()
+})
 
-  for(i=0;i<=4;i++){show_stock(i)}
+function initialize_data(){
+  potions = []
+  witches = [null,null,null,null,null,null]
+  potion_total = 0
+  score = 0
+  hyouban = 20
+  stock = [10,10,10,10]
+  combo = 0
+  max_combo = 0
+  time = 20
+  gamemode = ""
+}
+
+function initialize_element(){
+  for(i=0;i<=4;i++) show_stock(i)
 
   $(".stagename").hover(function(){
     $(this).css("background-color","black")
@@ -24,9 +44,16 @@ $(function(){
     $(this).css("color","black")
   })
 
+  $(".stagename").each(function(i,e){
+    var score = localStorage.getItem("sushipotion"+gamemode_str[i])
+    if(score == null) score = 0
+    $(this).text(gamemode_str[i]+" "+score)
+  })
+
   $(".stagename").click(function(){
     $("#title").toggle()
     $("#game").toggle()
+    gamemode = $(this).attr("id")
     start_game()
   })
 
@@ -51,8 +78,8 @@ $(function(){
     var materials = jQuery.map($(this).children(),function(material,i){
       return $(material).attr("class")
     })
-    var material_size = materials.length
     var materialbox = [0,0,0,0]
+    var material_size = materials.length
     jQuery.each(materials,function(i,mname){
       switch(mname){
         case 'mushroom'  : materialbox[0]+=1; break;
@@ -72,8 +99,7 @@ $(function(){
     }
     $("#cauldron").children().remove()
   })
-
-})
+}
 
 function start_game(){
   // ポーションの定期処理
@@ -108,8 +134,31 @@ function finish_game(){
   $("div").off()
   $("#cauldron").append("<p id=\"finish_score\"></p>")
   $("#cauldron").append("<p id=\"max_combo\"></p>")
-  $("#max_combo").html("max combo "+max_combo)
-  $("#finish_score").html("score "+score)
+  $("#cauldron").append("<p id=\"return_title\">return title</p>")
+  $("#max_combo").text("max combo "+max_combo)
+  $("#finish_score").text("score "+score)
+  $("#return_title").hover(function(){
+    $(this).css("background-color","black")
+    $(this).css("color","white")
+  },function(){
+    $(this).css("background-color","white")
+    $(this).css("color","black")
+  })
+
+  if(score > localStorage.getItem("sushipotion"+gamemode)){
+    localStorage.setItem("sushipotion"+gamemode, score)
+  }
+
+  $("#return_title").click(function(){
+    $("#game").toggle()
+    $("#title").toggle()
+    $("#cauldron").children().remove()
+    $(".gamevalues").text("")
+    initialize_data()
+    initialize_element()
+  })
+  $("#belt").children().remove()
+  for(var i=0;i<6;i++) remove_witch(i)
 }
 
 function set_order(){
@@ -189,17 +238,15 @@ function go_round_potion(color){
 
 function show_data(){
   var str = ""
-  for(var i=0;i<hyouban;i++){
-    str += "|"
-  }
+  for(var i=0;i<hyouban;i++) str += "|"
   if(str == "") str = "|"
-  $("#hyouban").html(str)
-  $("#score").html("score: "+score)
-  if(combo > 2) $("#combo").html(combo+"combo!")
+  $("#hyouban").text(str)
+  $("#score").text("score: "+score)
+  if(combo > 2) $("#combo").text(combo+"combo!")
 }
 
 function show_stock(material_no){
-  $("#"+material_name[material_no]+"_s").html(stock[material_no])
+  $("#"+material_name[material_no]+"_s").text(stock[material_no])
 }
 
 function get_material_no(material){
