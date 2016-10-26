@@ -12,6 +12,7 @@ var stock = [10,10,10,10]
 var combo = 0
 var max_combo = 0
 var time = 120
+var gamemode = ""
 
 $(function(){
   initialize_element()
@@ -28,6 +29,7 @@ function initialize_data(){
   combo = 0
   max_combo = 0
   time = 120
+  gamemode = ""
 }
 
 function initialize_element(){
@@ -44,6 +46,8 @@ function initialize_element(){
   $(".stagename").click(function(){
     $("#title").toggle()
     $("#game").toggle()
+    gamemode = $(this).html()
+    console.log(gamemode)
     start_game()
   })
 
