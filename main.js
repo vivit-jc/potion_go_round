@@ -134,6 +134,8 @@ function start_game(){
 
 function finish_game(){
   $("#cauldron").children().remove()
+  $("#phone").hide()
+  $("#book").hide()
   $("td").off()
   $("div").off()
   $("#cauldron").append("<p id=\"finish_score\"></p>")
