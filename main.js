@@ -1,6 +1,6 @@
 var material_name = ['mushroom','lizard','herbs','earthworm']
-var order = ["red","green","purple"]
-var price = [100,150,200]
+var order = ["red","green","purple","blue"]
+var price = [100,160,200,120]
 var gamemode_str = ["easy", "normal", "hard", "endless hasty", "endless 0miss"]
 
 var potions = []
@@ -12,7 +12,7 @@ var hyouban = 20
 var stock = [10,10,10,10]
 var combo = 0
 var max_combo = 0
-var time = 20
+var time = 180
 var gamemode = ""
 var recipe_page = 0
 
@@ -30,7 +30,7 @@ function initialize_data(){
   stock = [10,10,10,10]
   combo = 0
   max_combo = 0
-  time = 20
+  time = 180
   gamemode = ""
   recipe_page = 0
 }
@@ -59,7 +59,7 @@ function initialize_element(){
     start_game()
   })
 
-  $("td").click(function(){
+  $("td.material").click(function(){
     var material = $(this).attr("id")
     var no = get_material_no(material)
     if(stock[no] == 0) return false
@@ -127,6 +127,7 @@ function initialize_element(){
     }
     $("#cauldron").children().remove()
   })
+
 }
 
 function start_game(){
@@ -158,8 +159,8 @@ function start_game(){
 
 function finish_game(){
   $("#cauldron").children().remove()
-  $("#phone").hide()
-  $("#book").hide()
+  $(".recipe_page").hide()
+  $("#owl_page").hide()
   $("td").off()
   $("div").off()
   $("#cauldron").append("<p id=\"finish_score\"></p>")
@@ -273,11 +274,17 @@ function show_data(){
   $("#hyouban").text(str)
   $("#score").text("score: "+score)
   if(combo > 2) $("#combo").text(combo+"combo!")
+  else $("#combo").text("")
 }
 
 function toggle_recipe(){
-  $("#recipe_1").toggle()
-  recipe_page = 1 - recipe_page
+  if(recipe_page <= 1) {
+    $("#recipe_1").toggle()
+    recipe_page = 1 - recipe_page
+  } else if(recipe_page == 2) {
+    $("#recipe_2").toggle()
+    recipe_page = 0
+  }
 }
 
 function show_stock(material_no){
