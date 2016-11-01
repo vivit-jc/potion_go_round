@@ -49,9 +49,10 @@ td{
 #game{
   display: none;
 }
-#recipe{
+.recipe_page{
   background-color: white;
   position: absolute;
+  text-align: center;
   top: 40px;
   left: 40px;
   width: 300px;
@@ -155,7 +156,7 @@ td.recipe_potion{
   <div class="stage stagename" id="endless_hasty">endless_hasty</div>
   <div class="stage stagename" id="endless_0miss">endless_0miss</div>
 </div>
-<div id="recipe">
+<div id="recipe_1" class="recipe_page">
 <table>
 <tr>
   <td class="recipe_potion"><img src="img/redpotion.png"></td>
@@ -171,9 +172,31 @@ td.recipe_potion{
 </tr>
 <tr>
   <td class="recipe"><img src="img/mushroom.png"><img src="img/lizard.png"><img src="img/herbs.png"><img src="img/earthworm.png"></td>
-  <td class="recipe"><img src="img/mushroom.png"><img src="img/mushroom.png"></td>
+  <td class="recipe"><img src="img/lizard.png"><img src="img/herbs.png"></td>
 </tr>
 </table>
+<img class="arrow" src="img/right.png">
+</div>
+<div id="recipe_2" class="recipe_page">
+<table>
+<tr>
+  <td class="recipe_potion"><img src="img/orangepotion.png"></td>
+  <td class="recipe_potion"><img src="img/skypotion.png"></td>
+</tr>
+<tr>
+  <td class="recipe"><img src="img/herbs.png"><img src="img/herbs.png"></td>
+  <td class="recipe"><img src="img/lizard.png"><img src="img/lizard.png"><img src="img/earthworm.png"></td>
+</tr>
+<tr>
+  <td class="recipe_potion"><img src="img/pinkpotion.png"></td>
+  <td class="recipe_potion"><img src="img/graypotion.png"></td>
+</tr>
+<tr>
+  <td class="recipe"><img src="img/mushroom.png"><img src="img/mushroom.png"><img src="img/mushroom.png"></td>
+  <td class="recipe"><img src="img/mushroom.png"><img src="img/herbs.png"><img src="img/earthworm.png"><img src="img/earthworm.png"></td>
+</tr>
+</table>
+<img class="arrow" src="img/left.png">
 </div>
 </body>
 </html>

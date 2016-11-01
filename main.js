@@ -14,6 +14,7 @@ var combo = 0
 var max_combo = 0
 var time = 20
 var gamemode = ""
+var recipe_page = 0
 
 $(function(){
   initialize_element()
@@ -31,6 +32,7 @@ function initialize_data(){
   max_combo = 0
   time = 20
   gamemode = ""
+  recipe_page = 0
 }
 
 function initialize_element(){
@@ -70,6 +72,18 @@ function initialize_element(){
     toggle_recipe()
   })
 
+  $(".arrow").click(function(){
+    if(recipe_page == 1) {
+      recipe_page = 2
+      $("#recipe_1").hide()
+      $("#recipe_2").show()
+    } else if(recipe_page == 2) {
+      recipe_page = 1
+      $("#recipe_2").hide()
+      $("#recipe_1").show()
+    }
+  })
+
   $(".witch").click(function(){
     var id = parseInt($(this).attr("id"),10)
     if(witches[id] == "taken") {
@@ -98,6 +112,16 @@ function initialize_element(){
       go_round_potion('green')
     } else if([1,1,1,1].toString() == materialbox.toString()){
       go_round_potion('purple')
+    } else if([0,1,1,0].toString() == materialbox.toString()){
+      go_round_potion('blue')
+    } else if([0,0,2,0].toString() == materialbox.toString()){
+      go_round_potion('orange')
+    } else if([0,2,0,1].toString() == materialbox.toString()){
+      go_round_potion('sky')
+    } else if([3,0,0,0].toString() == materialbox.toString()){
+      go_round_potion('pink')
+    } else if([1,0,1,2].toString() == materialbox.toString()){
+      go_round_potion('gray')
     } else if(material_size > 0) {
       go_round_potion('')
     }
@@ -252,7 +276,8 @@ function show_data(){
 }
 
 function toggle_recipe(){
-  $("#recipe").toggle()
+  $("#recipe_1").toggle()
+  recipe_page = 1 - recipe_page
 }
 
 function show_stock(material_no){
