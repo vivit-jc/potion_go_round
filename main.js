@@ -8,13 +8,16 @@ var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
 var potion_total = 0
 var score = 0
-var hyouban = 20
 var stock = [10,10,10,10]
 var combo = 0
 var max_combo = 0
-var time = 180
 var gamemode = ""
 var recipe_page = 0
+var default_reputation = 20
+var default_gametime = 60*4 // *4は客の定期処理が250msに1度行われていることによる
+var reputation = default_reputation
+var gametime = default_gametime
+var witch_waittime = 80*4
 
 $(function(){
   initialize_element()
@@ -26,11 +29,11 @@ function initialize_data(){
   witches = [null,null,null,null,null,null]
   potion_total = 0
   score = 0
-  hyouban = 20
   stock = [10,10,10,10]
   combo = 0
   max_combo = 0
-  time = 180
+  reputation = default_reputation
+  gametime = default_gametime
   gamemode = ""
   recipe_page = 0
 }
@@ -88,7 +91,7 @@ function initialize_element(){
     var id = parseInt($(this).attr("id"),10)
     if(witches[id] == "taken") {
       witches[id] = null
-      $("#w"+id).attr("src","img/white.png")
+      $("#w"+id).attr("src","img/white_h.png")
     }
   })
 
@@ -140,21 +143,21 @@ function start_game(){
       check_order(i)
     })
     potions = potions.filter(function(e){return e != null})
-  },150)
+  },100)
 
   // 客の定期処理
   var repeat_witch = setInterval(function(){
-    set_order()
-    jQuery.each(witches, function(i,witch){
+    if(gametime%2 == 0 && dice() >= 5) set_order()
+    jQuery.each(witches, function(i, witch){
       if(witch != null) waiting_witch(i)
     })
-    time -= 1
-    if(time == 0){
+    gametime -= 1
+    if(gametime == 0 || reputation <= 0){
       clearInterval(repeat_potion)
       clearInterval(repeat_witch)
       finish_game()
     }
-  },1000)
+  }, 250)
 }
 
 function finish_game(){
@@ -189,17 +192,19 @@ function finish_game(){
     initialize_element()
   })
   $("#belt").children().remove()
-  for(var i=0;i<6;i++) remove_witch(i)
+  witches = [null, null, null, null, null, null]
+  setTimeout(function(){
+    for(var i=0;i<6;i++) remove_witch(i, false)
+  }, 500)
 }
 
 function set_order(){
-  if(dice() >= 3) return false
   if(witches.indexOf(null)<0) return false
   var potion = order[Math.floor(Math.random()*order.length)]
   while(true){
     var no = dice()
     if(!witches[no]){
-      witches[no] = [potion,60]
+      witches[no] = [potion, witch_waittime]
       add_witch(no)
       break
     }
@@ -208,12 +213,25 @@ function set_order(){
 
 function waiting_witch(no){
   if(witches[no] == "taken") return true
-  witch = witches[no]
+  var witch = witches[no]
+  var waittime = witch[1]
   witch[1] -= 1
-  if(witch[1] == 0){
-    remove_witch(no,false)
+  if(waittime <= 30*4 && waittime > 10*4 && waittime%4 == 0){
+    $("#w"+no).attr("src","img/witch_1.png")
+    setTimeout(function(){
+      $("#w"+no).attr("src","img/witch_0.png")
+    }, 400)
+  }
+  if(waittime <= 10*4 && waittime%2 == 0){
+    $("#w"+no).attr("src","img/witch_2.png")
+    setTimeout(function(){
+      $("#w"+no).attr("src","img/witch_0.png")
+    }, 200)
+  }
+  if(waittime == 0){
+    remove_witch(no, false)
     witches[no] = null
-    if(hyouban > 0) hyouban -= 3
+    if(reputation > 0) reputation -= 3
     combo = 0
     show_data()
   }
@@ -221,13 +239,13 @@ function waiting_witch(no){
 
 function remove_witch(no, bag){
   if(bag) $("#w"+no).attr("src","img/bag.png")
-  else $("#w"+no).attr("src","img/white.png")
+  else $("#w"+no).attr("src","img/white_h.png")
   $("#b"+no).attr("src","img/white.png")
   $("#o"+no).remove()
 }
 
 function add_witch(no){
-  $("#w"+no).attr("src","img/witch.png")
+  $("#w"+no).attr("src","img/witch_0.png")
   $("#b"+no).attr("src","img/bubble.png")
   $("#bubbles").append("<img class=\"potion\" src=\"img/"+witches[no][0]+"potion.png\" id=\"o"+no+"\">")
   $("img#o"+no).offset({left: witch_pos[no],top: 14})
@@ -251,7 +269,7 @@ function check_order(potion_no){
       potions[potion_no] = null
       witches[i] = "taken"
       score += price[order.indexOf(color)]
-      if(hyouban < 20) hyouban += 1
+      if(reputation < 20) reputation += 1
       combo += 1
       score += combo * 2
       if(combo > max_combo) max_combo = combo
@@ -269,9 +287,9 @@ function go_round_potion(color){
 
 function show_data(){
   var str = ""
-  for(var i=0;i<hyouban;i++) str += "|"
-  if(str == "") str = "|"
-  $("#hyouban").text(str)
+  for(var i=0;i<reputation;i++) str += "|"
+  if(str == "") str = ""
+  $("#hyouban").text("reputation "+str)
   $("#score").text("score: "+score)
   if(combo > 2) $("#combo").text(combo+"combo!")
   else $("#combo").text("")
