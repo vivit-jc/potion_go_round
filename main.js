@@ -1,6 +1,6 @@
 var material_name = ['mushroom','lizard','herbs','earthworm']
-var order = ["red","green","purple"]
-var price = [100,150,200]
+var order = ["red","green","purple","blue"]
+var price = [100,160,200,120]
 var gamemode_str = ["easy", "normal", "hard", "endless hasty", "endless 0miss"]
 
 var potions = []
@@ -12,8 +12,9 @@ var hyouban = 20
 var stock = [10,10,10,10]
 var combo = 0
 var max_combo = 0
-var time = 20
+var time = 180
 var gamemode = ""
+var recipe_page = 0
 
 $(function(){
   initialize_element()
@@ -29,8 +30,9 @@ function initialize_data(){
   stock = [10,10,10,10]
   combo = 0
   max_combo = 0
-  time = 20
+  time = 180
   gamemode = ""
+  recipe_page = 0
 }
 
 function initialize_element(){
@@ -57,13 +59,29 @@ function initialize_element(){
     start_game()
   })
 
-  $("td").click(function(){
+  $("td.material").click(function(){
     var material = $(this).attr("id")
     var no = get_material_no(material)
     if(stock[no] == 0) return false
     $("#cauldron").append("<img class=\""+material+"\" src=\"img/"+material+".png\">")
     stock[no] -= 1
     show_stock(no)
+  })
+
+  $("#book").click(function(){
+    toggle_recipe()
+  })
+
+  $(".arrow").click(function(){
+    if(recipe_page == 1) {
+      recipe_page = 2
+      $("#recipe_1").hide()
+      $("#recipe_2").show()
+    } else if(recipe_page == 2) {
+      recipe_page = 1
+      $("#recipe_2").hide()
+      $("#recipe_1").show()
+    }
   })
 
   $(".witch").click(function(){
@@ -94,11 +112,22 @@ function initialize_element(){
       go_round_potion('green')
     } else if([1,1,1,1].toString() == materialbox.toString()){
       go_round_potion('purple')
+    } else if([0,1,1,0].toString() == materialbox.toString()){
+      go_round_potion('blue')
+    } else if([0,0,2,0].toString() == materialbox.toString()){
+      go_round_potion('orange')
+    } else if([0,2,0,1].toString() == materialbox.toString()){
+      go_round_potion('sky')
+    } else if([3,0,0,0].toString() == materialbox.toString()){
+      go_round_potion('pink')
+    } else if([1,0,1,2].toString() == materialbox.toString()){
+      go_round_potion('gray')
     } else if(material_size > 0) {
       go_round_potion('')
     }
     $("#cauldron").children().remove()
   })
+
 }
 
 function start_game(){
@@ -130,6 +159,8 @@ function start_game(){
 
 function finish_game(){
   $("#cauldron").children().remove()
+  $(".recipe_page").hide()
+  $("#owl_page").hide()
   $("td").off()
   $("div").off()
   $("#cauldron").append("<p id=\"finish_score\"></p>")
@@ -243,6 +274,17 @@ function show_data(){
   $("#hyouban").text(str)
   $("#score").text("score: "+score)
   if(combo > 2) $("#combo").text(combo+"combo!")
+  else $("#combo").text("")
+}
+
+function toggle_recipe(){
+  if(recipe_page <= 1) {
+    $("#recipe_1").toggle()
+    recipe_page = 1 - recipe_page
+  } else if(recipe_page == 2) {
+    $("#recipe_2").toggle()
+    recipe_page = 0
+  }
 }
 
 function show_stock(material_no){
