@@ -49,7 +49,19 @@ td{
 #game{
   display: none;
 }
-.recipe_page{
+td.recipe{
+  width: auto;
+  height: auto;
+}
+td.recipe_potion{
+  width: 148px;
+  height: 80px;
+}
+td.owl_order{
+  width: 148px;
+  height: 64px;
+}
+.subwindow{
   background-color: white;
   position: absolute;
   text-align: center;
@@ -61,15 +73,10 @@ td{
   border: solid;
   display: none;
 }
-td.recipe{
-  width: auto;
-  height: auto;
+.bold{
+  font-weight: bold;
+  font-size: 120%;
 }
-td.recipe_potion{
-  width: 148px;
-  height: 80px;
-}
-
 </style>
 </head>
 <body>
@@ -133,7 +140,8 @@ td.recipe_potion{
 </div>
 <div class="column">
 <div id="owl" class="column_box">
-  <img src="img/owl.png">
+  <img id="owlimg" src="img/owl.png"><br>
+  <span id="stamina">♥♥♥♥♥</span>
 </div>
 <div id="book" class="column_box">
   <img src="img/book.png">
@@ -156,7 +164,7 @@ td.recipe_potion{
   <div class="stage stagename" id="endless_hasty">endless_hasty</div>
   <div class="stage stagename" id="endless_0miss">endless_0miss</div>
 </div>
-<div id="recipe_1" class="recipe_page">
+<div id="recipe_1" class="recipe_page subwindow">
 <table>
 <tr>
   <td class="recipe_potion"><img src="img/redpotion.png"></td>
@@ -177,7 +185,7 @@ td.recipe_potion{
 </table>
 <img class="arrow" src="img/right.png">
 </div>
-<div id="recipe_2" class="recipe_page">
+<div id="recipe_2" class="recipe_page subwindow">
 <table>
 <tr>
   <td class="recipe_potion"><img src="img/orangepotion.png"></td>
@@ -197,6 +205,26 @@ td.recipe_potion{
 </tr>
 </table>
 <img class="arrow" src="img/left.png">
+</div>
+<div id="owl_select" class="subwindow">
+<table>
+<tr>
+  <td class="owl_order" id="mushroom_n"><img src="img/mushroom.png">*6<br>normal 7sec</td>
+  <td class="owl_order" id="herbs_n"><img src="img/herbs.png">*4<br>normal 8sec</td>
+</tr>
+<tr>
+  <td class="owl_order" id="mushroom_q"><img src="img/mushroom.png">*5<br>quick 2sec</td>
+  <td class="owl_order" id="herbs_q"><img src="img/herbs.png">*3<br>quick 2sec</td>
+</tr>
+<tr>
+  <td class="owl_order" id="earthworm_n"><img src="img/earthworm.png">*3<br>normal 10sec</td>
+  <td class="owl_order" id="lizard_n"><img src="img/lizard.png">*4<br>normal 8sec</td>
+</tr>
+<tr>
+  <td class="owl_order" id="earthworm_q"><img src="img/earthworm.png">*2<br>quick 3sec</td>
+  <td class="owl_order" id="lizard_q"><img src="img/lizard.png">*3<br>quick 2sec</td>
+</tr>
+</table>
 </div>
 </body>
 </html>
