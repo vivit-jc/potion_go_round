@@ -19,7 +19,7 @@ var stamina_charge = 0
 var delivering = false
 var default_reputation = 20
 var reputation = default_reputation
-var default_gametime = 60*4 // *4は客の定期処理が250msに1度行われていることによる
+var default_gametime = 300*4 // *4は客の定期処理が250msに1度行われていることによる
 var gametime = default_gametime
 var witch_waittime = 80*4
 
@@ -168,11 +168,12 @@ function start_game(){
 
   // 客の定期処理
   var repeat_witch = setInterval(function(){
-    if(gametime%2 == 0 && dice() >= 5) set_order()
+    if(gametime%2 == 0 && dice() >= 4) set_order()
     jQuery.each(witches, function(i, witch){
       if(witch != null) waiting_witch(i)
     })
     gametime -= 1
+    show_timer()
     if(gametime == 0 || reputation <= 0){
       clearInterval(repeat_potion)
       clearInterval(repeat_witch)
@@ -378,6 +379,15 @@ function show_owl(){
   var str = ""
   for(var i=0;i<stamina;i++) str += "♥"
   $("#stamina").text(str)
+}
+
+function show_timer(){
+  var str = ""
+  for(var i=0;i<40;i++){
+    if((default_gametime-gametime)>(default_gametime/40)*i) str += "*"
+    else str += "_"
+  }
+  $("#timer").text(str)
 }
 
 function show_stock(material_no){
