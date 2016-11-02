@@ -13,9 +13,13 @@ var combo = 0
 var max_combo = 0
 var gamemode = ""
 var recipe_page = 0
+var default_stamina = 5
+var stamina = default_stamina
+var stamina_charge = 0
+var delivering = false
 var default_reputation = 20
-var default_gametime = 60*4 // *4は客の定期処理が250msに1度行われていることによる
 var reputation = default_reputation
+var default_gametime = 60*4 // *4は客の定期処理が250msに1度行われていることによる
 var gametime = default_gametime
 var witch_waittime = 80*4
 
@@ -36,6 +40,9 @@ function initialize_data(){
   gametime = default_gametime
   gamemode = ""
   recipe_page = 0
+  stamina = default_stamina
+  stamina_charge = 0
+  deivering = false
 }
 
 function initialize_element(){
@@ -71,7 +78,9 @@ function initialize_element(){
     show_stock(no)
   })
 
+// レシピブック
   $("#book").click(function(){
+    $("#owl_select").hide()
     toggle_recipe()
   })
 
@@ -87,6 +96,18 @@ function initialize_element(){
     }
   })
 
+// フクロウ
+  $("#owl").click(function(){
+    $(".recipe_page").hide()
+    if(stamina <= 0 || delivering) return true
+    $("#owl_select").toggle()
+  })
+
+  $(".owl_order").click(function(){
+    owl_delivery($(this).attr("id"))
+  })
+
+// 魔女（金貨袋）
   $(".witch").click(function(){
     var id = parseInt($(this).attr("id"),10)
     if(witches[id] == "taken") {
@@ -158,14 +179,24 @@ function start_game(){
       finish_game()
     }
   }, 250)
+
+  // フクロウのスタミナ
+  var rest_owl = setInterval(function(){
+    if(delivering) return false
+    if(stamina == -1 && stamina_charge == 40) up_stamina()
+    else if(stamina == 0 && stamina_charge == 32) up_stamina()
+    else if(stamina <= 4 && stamina_charge == 20) up_stamina()
+    else if(stamina <= 4) stamina_charge += 1
+  }, 250)
 }
 
 function finish_game(){
   $("#cauldron").children().remove()
-  $(".recipe_page").hide()
-  $("#owl_page").hide()
+  $(".subwindow").hide()
+  $("#combo").text("")
   $("td").off()
   $("div").off()
+  $("#cauldron").append("<p class=\"bold\">game over</p>")
   $("#cauldron").append("<p id=\"finish_score\"></p>")
   $("#cauldron").append("<p id=\"max_combo\"></p>")
   $("#cauldron").append("<p id=\"return_title\">return title</p>")
@@ -285,11 +316,43 @@ function go_round_potion(color){
   potion_total += 1
 }
 
+function owl_delivery(id){
+  var acttype = id.split("_")[1]
+  var material = get_material_no(id.split("_")[0])
+  var n_material = [6,4,4,3]
+  var q_material = [5,3,3,2]
+  var n_time = [7,8,8,10]
+  var q_time = [2,2,2,3]
+  var delitime = 0
+  var num = 0
+  if(acttype == "q") {
+    stamina -= 2
+    delitime = q_time[material]
+    num = q_material[material]
+  } else {
+    stamina -= 1
+    delitime = n_time[material]
+    num = n_material[material]
+  }
+  show_owl()
+  $("#owlimg").attr("src", "img/white.png")
+  delivering = true
+  $("#owl_select").hide()
+  setTimeout(function(){
+    stock[material] += num
+    $("#owlimg").attr("src", "img/owl.png")
+    delivering = false
+    show_stock(material)
+  }, delitime*1000)
+
+}
+
 function show_data(){
   var str = ""
   for(var i=0;i<reputation;i++) str += "|"
   if(str == "") str = ""
   $("#hyouban").text("reputation "+str)
+
   $("#score").text("score: "+score)
   if(combo > 2) $("#combo").text(combo+"combo!")
   else $("#combo").text("")
@@ -303,6 +366,18 @@ function toggle_recipe(){
     $("#recipe_2").toggle()
     recipe_page = 0
   }
+}
+
+function up_stamina(){
+  stamina += 1
+  stamina_charge = 0
+  show_owl()
+}
+
+function show_owl(){
+  var str = ""
+  for(var i=0;i<stamina;i++) str += "♥"
+  $("#stamina").text(str)
 }
 
 function show_stock(material_no){
