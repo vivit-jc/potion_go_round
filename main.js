@@ -8,13 +8,15 @@ var witch_pos = [24,88,152,216,280,344]
 var witches = [null,null,null,null,null,null]
 var potion_total = 0
 var score = 0
-var hyouban = 20
 var stock = [10,10,10,10]
 var combo = 0
 var max_combo = 0
-var time = 180
 var gamemode = ""
 var recipe_page = 0
+var default_reputation = 20
+var default_gametime = 720
+var reputation = default_reputation
+var gametime = default_gametime
 
 $(function(){
   initialize_element()
@@ -26,11 +28,11 @@ function initialize_data(){
   witches = [null,null,null,null,null,null]
   potion_total = 0
   score = 0
-  hyouban = 20
   stock = [10,10,10,10]
   combo = 0
   max_combo = 0
-  time = 180
+  reputation = default_reputation
+  gametime = default_gametime
   gamemode = ""
   recipe_page = 0
 }
@@ -148,8 +150,8 @@ function start_game(){
     jQuery.each(witches, function(i,witch){
       if(witch != null) waiting_witch(i)
     })
-    time -= 1
-    if(time == 0){
+    gametime -= 1
+    if(gametime == 0){
       clearInterval(repeat_potion)
       clearInterval(repeat_witch)
       finish_game()
@@ -213,7 +215,7 @@ function waiting_witch(no){
   if(witch[1] == 0){
     remove_witch(no,false)
     witches[no] = null
-    if(hyouban > 0) hyouban -= 3
+    if(reputation > 0) reputation -= 3
     combo = 0
     show_data()
   }
@@ -251,7 +253,7 @@ function check_order(potion_no){
       potions[potion_no] = null
       witches[i] = "taken"
       score += price[order.indexOf(color)]
-      if(hyouban < 20) hyouban += 1
+      if(reputation < 20) reputation += 1
       combo += 1
       score += combo * 2
       if(combo > max_combo) max_combo = combo
@@ -269,9 +271,9 @@ function go_round_potion(color){
 
 function show_data(){
   var str = ""
-  for(var i=0;i<hyouban;i++) str += "|"
-  if(str == "") str = "|"
-  $("#hyouban").text(str)
+  for(var i=0;i<reputation;i++) str += "|"
+  if(str == "") str = ""
+  $("#hyouban").text("reputation "+str)
   $("#score").text("score: "+score)
   if(combo > 2) $("#combo").text(combo+"combo!")
   else $("#combo").text("")
