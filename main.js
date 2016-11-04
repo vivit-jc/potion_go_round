@@ -155,15 +155,16 @@ function initialize_element(){
 }
 
 function start_game(){
-  // ポーションの定期処理
+
   show_data()
 
+  // ポーションの定期処理
   var repeat_potion = setInterval(function(){
     jQuery.each(potions,function(i){
       move_potion(i)
       check_order(i)
     })
-    potions = potions.filter(function(e){return e != null})
+    reject_null_potion()
   },100)
 
   // 客の定期処理
@@ -314,6 +315,14 @@ function go_round_potion(color){
   $("#belt").append("<img class=\"potion\" id=\"p"+potion_total+"\" src=\"img/"+color+"potion.png\">")
   $("img#p"+potion_total).offset({left: 8});
   potions.push([color, 8, potion_total])
+
+  if(color == ""){
+    $("img#p"+potion_total).click(function(){
+      $(this).remove()
+      potions[potion_total] = null
+      reject_null_potion()
+    })
+  }
   potion_total += 1
 }
 
@@ -396,6 +405,10 @@ function show_stock(material_no){
 
 function get_material_no(material){
   return material_name.indexOf(material)
+}
+
+function reject_null_potion(){
+  potions = potions.filter(function(e){return e != null})
 }
 
 function dice(){
