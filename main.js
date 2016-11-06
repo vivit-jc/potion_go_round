@@ -85,10 +85,6 @@ function initialize_element(){
     return false
   })
 
-  $(".recipe_page").click(function(){
-    return false
-  })
-
   $(".arrow").click(function(){
     if(recipe_page == 1) {
       recipe_page = 2
@@ -99,6 +95,10 @@ function initialize_element(){
       $("#recipe_2").hide()
       $("#recipe_1").show()
     }
+    return false
+  })
+
+  $(".recipe_page").click(function(){
     return false
   })
 
@@ -263,13 +263,19 @@ function waiting_witch(no){
   if(waittime <= 30*4 && waittime > 10*4 && waittime%4 == 0){
     $("#w"+no).attr("src","img/witch_1.png")
     setTimeout(function(){
-      $("#w"+no).attr("src","img/witch_0.png")
+      var src = $("#w"+no).attr("src")
+      if(src != "img/bag.png" && src != "img/white.png" ) {
+        $("#w"+no).attr("src","img/witch_0.png")
+      }
     }, 400)
   }
   if(waittime <= 10*4 && waittime%2 == 0){
     $("#w"+no).attr("src","img/witch_2.png")
     setTimeout(function(){
-      $("#w"+no).attr("src","img/witch_0.png")
+      var src = $("#w"+no).attr("src")
+      if(src != "img/bag.png" && src != "img/white.png" ) {
+        $("#w"+no).attr("src","img/witch_0.png")
+      }
     }, 200)
   }
   if(waittime == 0){
