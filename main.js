@@ -82,6 +82,11 @@ function initialize_element(){
   $("#book").click(function(){
     $("#owl_select").hide()
     toggle_recipe()
+    return false
+  })
+
+  $(".recipe_page").click(function(){
+    return false
   })
 
   $(".arrow").click(function(){
@@ -94,6 +99,7 @@ function initialize_element(){
       $("#recipe_2").hide()
       $("#recipe_1").show()
     }
+    return false
   })
 
 // フクロウ
@@ -101,10 +107,15 @@ function initialize_element(){
     $(".recipe_page").hide()
     if(stamina <= 0 || delivering) return true
     $("#owl_select").toggle()
+    return false
   })
 
   $(".owl_order").click(function(){
     owl_delivery($(this).attr("id"))
+  })
+
+  $(document).click(function(){
+    $(".subwindow").hide()
   })
 
 // 魔女（金貨袋）
