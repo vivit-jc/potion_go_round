@@ -86,11 +86,11 @@ function initialize_element(){
   })
 
   $(".arrow").click(function(){
-    if(recipe_page == 1) {
+    if($(this).attr("src") == "img/right.png") {
       recipe_page = 2
       $("#recipe_1").hide()
       $("#recipe_2").show()
-    } else if(recipe_page == 2) {
+    } else if($(this).attr("src") == "img/left.png") {
       recipe_page = 1
       $("#recipe_2").hide()
       $("#recipe_1").show()
@@ -288,7 +288,7 @@ function waiting_witch(no){
     if(reputation > 0 && gamemode == "hard") reputation -= 8
     else if(reputation > 0) reputation -= 4
     combo = 0
-    if(gamemode == "endless_0miss") time = 10080
+    if(gamemode == "endless_0miss") gametime = 10080
     show_data()
   }
 }
