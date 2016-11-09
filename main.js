@@ -1,6 +1,6 @@
 var material_name = ['mushroom','lizard','herbs','earthworm']
-var order = ["red","green","purple","blue"]
-var price = [100,160,200,120]
+var order = ["red","green","purple","blue","orange","sky","pink","gray"]
+var price = [80,130,200,90,90,160,110,220]
 var gamemode_str = ["easy", "normal", "hard", "endless hasty", "endless 0miss"]
 
 var potions = []
@@ -186,6 +186,7 @@ function start_game(){
     })
     gametime -= 1
     show_timer()
+    if(gametime == 0 && (gamemode == "endless_hasty" || gamemode == "endless_0miss")) gametime = default_gametime
     if(gametime == 0 || reputation <= 0){
       clearInterval(repeat_potion)
       clearInterval(repeat_witch)
@@ -244,7 +245,8 @@ function finish_game(){
 
 function set_order(){
   if(witches.indexOf(null)<0) return false
-  var potion = order[Math.floor(Math.random()*order.length)]
+  var potion = order[Math.floor(Math.random()*8)]
+  if(gamemode == "easy") potion = order[Math.floor(Math.random()*4)]
   while(true){
     var no = dice()
     if(!witches[no]){
@@ -281,7 +283,8 @@ function waiting_witch(no){
   if(waittime == 0){
     remove_witch(no, false)
     witches[no] = null
-    if(reputation > 0) reputation -= 3
+    if(reputation > 0 && gamemode == "hard") reputation -= 8
+    else if(reputation > 0) reputation -= 4
     combo = 0
     show_data()
   }
@@ -409,11 +412,15 @@ function show_owl(){
 
 function show_timer(){
   var str = ""
-  for(var i=0;i<40;i++){
-    if((default_gametime-gametime)>(default_gametime/40)*i) str += "*"
-    else str += "_"
+  if(gamemode == "endless_hasty" || gamemode == "endless_0miss"){
+    $("#timer").text("     *  Endless Night  *     ")
+  } else {
+    for(var i=0;i<40;i++){
+      if((default_gametime-gametime)>(default_gametime/40)*i) str += "*"
+      else str += "_"
+    }
+    $("#timer").text(str)
   }
-  $("#timer").text(str)
 }
 
 function show_stock(material_no){
