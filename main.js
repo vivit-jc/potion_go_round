@@ -210,10 +210,12 @@ function finish_game(){
   $("#combo").text("")
   $("td").off()
   $("div").off()
-  $("#cauldron").append("<p class=\"bold\">game over</p>")
+  $("#cauldron").append("<p class=\"bold\">GAME OVER</p>")
   $("#cauldron").append("<p id=\"finish_score\"></p>")
   $("#cauldron").append("<p id=\"max_combo\"></p>")
   $("#cauldron").append("<p id=\"return_title\">return title</p>")
+  $("#cauldron").append("<a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-text=\"easy\">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>")
+  $(".twitter-share-button").attr("data-text", "[POTION GO ROUND] "+gamemode+" score: "+score+" http://intotheprow.sakura.ne.jp/potiongoround")
   $("#max_combo").text("max combo "+max_combo)
   $("#finish_score").text("score "+score)
   $("#return_title").hover(function(){
