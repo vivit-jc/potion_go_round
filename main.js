@@ -187,7 +187,7 @@ function start_game(){
     gametime -= 1
     show_timer()
     if(gametime == 0 && (gamemode == "endless_hasty" || gamemode == "endless_0miss")) gametime = default_gametime
-    if(gametime == 0 || reputation <= 0){
+    if(gametime == 0 || reputation <= 0 || gametime > 10000){
       clearInterval(repeat_potion)
       clearInterval(repeat_witch)
       finish_game()
@@ -250,6 +250,8 @@ function set_order(){
   while(true){
     var no = dice()
     if(!witches[no]){
+      var waittime = witch_waittime
+      if(gamemode == "endless_hasty") waittime = 50
       witches[no] = [potion, witch_waittime]
       add_witch(no)
       break
@@ -286,6 +288,7 @@ function waiting_witch(no){
     if(reputation > 0 && gamemode == "hard") reputation -= 8
     else if(reputation > 0) reputation -= 4
     combo = 0
+    if(gamemode == "endless_0miss") time = 10080
     show_data()
   }
 }
@@ -413,7 +416,7 @@ function show_owl(){
 function show_timer(){
   var str = ""
   if(gamemode == "endless_hasty" || gamemode == "endless_0miss"){
-    $("#timer").text("     *  Endless Night  *     ")
+    $("#timer").text(" *  Endless Night  * ")
   } else {
     for(var i=0;i<40;i++){
       if((default_gametime-gametime)>(default_gametime/40)*i) str += "*"
